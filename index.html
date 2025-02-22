@@ -1,110 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Calculator 3000</title>
-    <style>
-        body {
-            background: radial-gradient(circle, #000428, #004e92);
-            color: #00ffcc;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        h1 {
-            font-size: 2rem;
-            text-shadow: 0 0 15px cyan;
-        }
-
-        .calculator-container {
-            width: 90%;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            box-shadow: 0px 0px 20px cyan;
-            backdrop-filter: blur(10px);
-        }
-
-        input {
-            width: 90%;
-            padding: 10px;
-            font-size: 1.2rem;
-            border: none;
-            outline: none;
-            border-radius: 5px;
-            text-align: center;
-            background: rgba(0, 255, 255, 0.2);
-            color: white;
-        }
-
-        button {
-            background: #00ffcc;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #ff00ff;
-            box-shadow: 0px 0px 10px white;
-        }
-
-        .result {
-            font-size: 1.5rem;
-            margin-top: 15px;
-            text-shadow: 0 0 10px cyan;
-        }
-
-        /* Holographic UI */
-        .holo-effect {
-            animation: flicker 1.5s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h1 class="holo-effect">🚀 Nexus Calculator 3000 🚀</h1>
-
-    <div class="calculator-container">
-        <input type="text" id="expression" placeholder="Enter Calculation (e.g., 5 + 3 * 2)">
-        <button onclick="calculate()">Calculate</button>
-        <button onclick="speakResult()">🔊 Speak</button>
-        <div class="result" id="result"></div>
+    <div class="container">
+        <h1>Nexus Calculator 3000 🚀</h1>
+        <input type="text" id="calculation" placeholder="Enter Calculation (e.g., 5 + 3 * 2)">
+        <div class="buttons">
+            <button onclick="calculate()">Calculate</button>
+            <button onclick="startListening()">🎙️ Speak</button>
+        </div>
+        <div id="result"></div>
     </div>
-
-    <script>
-        function calculate() {
-            let expression = document.getElementById("expression").value;
-            try {
-                let result = eval(expression);
-                document.getElementById("result").innerHTML = "Result: " + result;
-            } catch (error) {
-                document.getElementById("result").innerHTML = "Error!";
-            }
-        }
-
-        function speakResult() {
-            let resultText = document.getElementById("result").innerText;
-            let synth = window.speechSynthesis;
-            let utterance = new SpeechSynthesisUtterance(resultText);
-            synth.speak(utterance);
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
