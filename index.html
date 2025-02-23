@@ -5,169 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXUS 3000</title>
     <style>
-        /* CYBERPUNK STYLES */
+        /* J.A.R.V.I.S. CORE STYLES */
         :root {
-            --neon-blue: #00f3ff;
-            --matrix-green: #0f0;
-            --hacker-red: #ff003c;
+            --jarvis-blue: #00f3ff;
+            --hologram-purple: #bc13fe;
+            --ai-glow: 0 0 30px rgba(188,19,254,0.8);
         }
 
         body {
             margin: 0;
-            background: #000;
-            font-family: 'Courier New', monospace;
-            height: 100vh;
+            background: radial-gradient(circle at center, 
+                #001122 0%, 
+                #000811 100%);
+            color: var(--jarvis-blue);
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
             overflow: hidden;
         }
 
-        /* 3D BACKGROUND */
-        #hologram-bg {
+        /* FLOATING WIDGET */
+        .nexus-widget {
             position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.2;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            background: rgba(0,17,34,0.95);
+            border: 3px solid var(--jarvis-blue);
+            border-radius: 20px;
+            box-shadow: var(--ai-glow),
+                        inset 0 0 50px rgba(0,243,255,0.2);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: all 0.3s;
         }
 
-        /* CALCULATOR INTERFACE */
-        .nexus-ui {
-            position: relative;
-            z-index: 9999;
-            width: 90%;
-            max-width: 500px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(0,0,0,0.95);
-            border: 2px solid var(--neon-blue);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,243,255,0.3);
+        .nexus-widget:hover {
+            transform: scale(1.05) rotateX(5deg) rotateY(-5deg);
         }
 
-        .display {
+        /* HOLOGRAPHIC DISPLAY */
+        .hologram-display {
             font-size: 2.5em;
-            color: var(--neon-blue);
+            color: var(--jarvis-blue);
             text-align: right;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid var(--matrix-green);
-            text-shadow: 0 0 10px var(--neon-blue);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--hologram-purple);
+            text-shadow: 0 0 15px var(--jarvis-blue);
+            animation: hologram-float 3s ease-in-out infinite;
         }
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        @keyframes hologram-float {
+            0%, 100% { transform: translateY(0) rotateX(5deg); }
+            50% { transform: translateY(-10px) rotateX(7deg); }
         }
 
-        button {
+        /* VOICE COMMAND BUTTON */
+        .voice-btn {
+            width: 100%;
             padding: 15px;
+            background: rgba(0,34,68,0.8);
+            border: 2px solid var(--jarvis-blue);
+            color: var(--jarvis-blue);
             font-size: 1.2em;
-            background: #000;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        button:hover {
-            background: var(--neon-blue);
+        .voice-btn:hover {
+            background: var(--jarvis-blue);
             color: #000;
+            box-shadow: 0 0 40px var(--jarvis-blue);
         }
 
-        .crypto-feed {
-            color: var(--matrix-green);
-            margin-top: 15px;
-            font-size: 0.9em;
+        /* STATUS INDICATOR */
+        .status {
+            color: var(--hologram-purple);
+            padding: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <canvas id="hologram-bg"></canvas>
-    
-    <div class="nexus-ui">
-        <div class="display" id="display">0</div>
-        <div class="buttons" id="buttons"></div>
-        <div class="crypto-feed" id="crypto-feed"></div>
+    <!-- FLOATING WIDGET -->
+    <div class="nexus-widget">
+        <div class="hologram-display" id="display">0</div>
+        <button class="voice-btn" id="voice-btn">🎙️ Voice Command</button>
+        <div class="status" id="status">AI: Ready</div>
     </div>
 
     <script>
         // =====================
-        // 3D HOLOGRAM BACKGROUND
+        // J.A.R.V.I.S. CORE SYSTEM
         // =====================
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: document.getElementById('hologram-bg'),
-            alpha: true 
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        class Nexus3000 {
+            constructor() {
+                this.display = document.getElementById('display');
+                this.status = document.getElementById('status');
+                this.initVoiceAI();
+            }
 
-        const geometry = new THREE.IcosahedronGeometry(2);
-        const material = new THREE.MeshBasicMaterial({ 
-            color: 0x00ff00,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.15
-        });
-        
-        const hologram = new THREE.Mesh(geometry, material);
-        scene.add(hologram);
-        camera.position.z = 5;
+            // =====================
+            // VOICE AI INTEGRATION
+            // =====================
+            initVoiceAI() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if(SpeechRecognition) {
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = true;
+                    this.recognition.lang = 'en-US';
+                    this.recognition.onresult = (e) => this.processVoice(e);
+                    
+                    document.getElementById('voice-btn').addEventListener('click', () => {
+                        this.recognition.start();
+                        this.status.textContent = "AI: Listening...";
+                    });
+                }
+            }
 
-        const animate = () => {
-            requestAnimationFrame(animate);
-            hologram.rotation.x += 0.01;
-            hologram.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        };
-        animate();
+            processVoice(event) {
+                const command = event.results[0][0].transcript.toLowerCase();
+                this.status.textContent = `AI: Heard "${command}"`;
+                
+                if(command.includes('calculate')) {
+                    const equation = command.replace('calculate', '').trim();
+                    this.solveEquation(equation);
+                }
+            }
 
-        // =====================
-        // CALCULATOR CORE
-        // =====================
-        const display = document.getElementById('display');
-        const buttons = [
-            '7','8','9','/',
-            '4','5','6','*',
-            '1','2','3','-',
-            'C','0','=','+'
-        ];
+            solveEquation(equation) {
+                try {
+                    const result = math.evaluate(equation);
+                    this.display.textContent = result;
+                    this.speak(`The result is ${result}`);
+                } catch {
+                    this.display.textContent = 'ERROR';
+                    this.speak('Unable to compute');
+                }
+            }
 
-        buttons.forEach(btn => {
-            const button = document.createElement('button');
-            button.textContent = btn;
-            button.onclick = () => handleInput(btn);
-            document.getElementById('buttons').appendChild(button);
-        });
-
-        function handleInput(value) {
-            if(value === 'C') display.textContent = '0';
-            else if(value === '=') calculate();
-            else display.textContent = 
-                display.textContent === '0' ? value : display.textContent + value;
-        }
-
-        function calculate() {
-            try {
-                display.textContent = math.evaluate(display.textContent);
-            } catch {
-                display.textContent = 'ERROR';
+            speak(text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = speechSynthesis.getVoices().find(v => v.name.includes('Zira'));
+                speechSynthesis.speak(utterance);
             }
         }
 
         // =====================
-        // LIVE CRYPTO PRICES
+        // INITIALIZE SYSTEM
         // =====================
-        async function loadCryptoPrices() {
-            try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
-                const data = await response.json();
-                document.getElementById('crypto-feed').textContent = 
-                    `BTC: $${data.bitcoin.usd}`;
-            } catch {
-                document.getElementById('crypto-feed').textContent = "Live data unavailable";
-            }
-        }
-        loadCryptoPrices();
+        window.addEventListener('load', () => new Nexus3000());
     </script>
 </body>
 </html>
