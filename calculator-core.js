@@ -35,4 +35,16 @@ class NexusCalculator {
 
         return traverse(parsed);
     }
+
+    solveEquation(equation, variable) {
+        try {
+            const solution = math.solve(equation, variable);
+            this.steps.push(`Solving for ${variable}:`);
+            this.steps.push(`Solution: ${solution}`);
+            return solution;
+        } catch (error) {
+            this.steps.push('EQUATION ERROR');
+            throw new Error('Failed to solve equation.');
+        }
+    }
 }
