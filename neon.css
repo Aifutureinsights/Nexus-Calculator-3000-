@@ -111,6 +111,10 @@ button:hover {
     box-shadow: 0 0 40px var(--matrix-green);
 }
 
+button:active {
+    transform: scale(0.95);
+}
+
 /* CRYPTO SIDEBAR */
 .crypto-sidebar {
     position: fixed;
@@ -128,4 +132,12 @@ button:hover {
 .crypto-ticker {
     color: var(--matrix-green);
     font-size: 1.2em;
+    text-shadow: 0 0 20px var(--matrix-green);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
 }
