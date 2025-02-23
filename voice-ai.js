@@ -1,28 +1,20 @@
 class VoiceAI {
     constructor() {
-        // Check if the Web Speech API is supported
         if (!('webkitSpeechRecognition' in window)) {
             alert("Voice recognition is not supported in this browser. Please use Google Chrome.");
             return;
         }
 
-        // Initialize speech recognition
         this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         this.synth = window.speechSynthesis;
-
-        // Configure voice recognition settings
         this.configureVoice();
     }
 
     configureVoice() {
-        this.recognition.continuous = true; // Listen continuously
-        this.recognition.interimResults = true; // Show interim results
-        this.recognition.lang = 'en-US'; // Set language to English
-
-        // Handle recognized speech
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
+        this.recognition.lang = 'en-US';
         this.recognition.onresult = (event) => this.handleVoiceInput(event);
-
-        // Handle errors
         this.recognition.onerror = (event) => {
             console.error("Voice recognition error:", event.error);
             alert("Error with voice recognition. Please try again.");
@@ -30,13 +22,10 @@ class VoiceAI {
     }
 
     handleVoiceInput(event) {
-        // Extract the transcript from the speech recognition result
         const transcript = Array.from(event.results)
             .map(result => result[0])
             .map(result => result.transcript)
             .join('');
-
-        // Process the command when the result is final
         if (event.results[0].isFinal) {
             this.processCommand(transcript);
         }
@@ -44,10 +33,8 @@ class VoiceAI {
 
     processCommand(command) {
         const calculator = new NexusCalculator();
-
-        // Check if the command includes "calculate"
         if (command.toLowerCase().includes('calculate')) {
-            const equation = command.replace(/calculate/i, '').trim(); // Remove "calculate" from the input
+            const equation = command.replace(/calculate/i, '').trim();
             try {
                 const { result, steps } = calculator.calculate(equation);
 
