@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔥 NEXUS 3000 🔥</title>
+    <!-- Styles -->
     <link rel="stylesheet" href="./neon.css">
+    <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="./main.js" defer></script>
 </head>
 <body>
+    <!-- Boot Sequence -->
+    <div class="supercomputer-boot">
+        <div class="boot-loader"></div>
+        <p class="neon-text">Initializing Nexus Calculator 3000...</p>
+    </div>
+
     <!-- 3D Background -->
     <canvas id="hologram-bg"></canvas>
-    
+
     <!-- Calculator Interface -->
-    <div class="nexus-ui">
+    <div class="nexus-ui hidden">
         <div class="hologram-display" id="display">0</div>
         <div class="button-matrix" id="buttons"></div>
         <div class="data-stream" id="live-feed"></div>
@@ -22,7 +30,7 @@
 
     <!-- Crypto Sidebar -->
     <div class="crypto-sidebar">
-        <div class="crypto-ticker" id="crypto-ticker"></div>
+        <div class="crypto-ticker" id="crypto-ticker">Loading crypto prices...</div>
     </div>
 </body>
 </html>
