@@ -1,17 +1,145 @@
+/* Root Variables */
 :root {
     --neon-blue: #00f3ff;
     --neon-pink: #ff00ff;
     --matrix-green: #0f0;
 }
 
+/* Body Styling */
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: #000;
+    color: var(--neon-blue);
+    overflow: hidden;
+}
+
+/* Hologram Container */
+#hologram-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.8), #000);
+}
+
+/* Tron Grid Canvas */
+#tron-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Futuristic Text */
 .neon-text {
     text-shadow: 0 0 10px var(--neon-blue),
                  0 0 20px var(--neon-blue),
                  0 0 30px var(--neon-blue);
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
     0% { opacity: 0.8; }
     50% { opacity: 1; }
     100% { opacity: 0.8; }
+}
+
+/* Cyber Button */
+.cyber-button {
+    background: #111;
+    border: 2px solid var(--neon-pink);
+    color: var(--neon-blue);
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent, 
+        var(--neon-blue),
+        transparent);
+    animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Boot Sequence */
+.supercomputer-boot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.boot-loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--neon-blue);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Calculator Main */
+.calculator-main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    padding: 2rem;
+    border: 2px solid var(--neon-blue);
+    border-radius: 15px;
+    box-shadow: 0 0 50px var(--neon-blue);
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Steps List */
+#steps-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+#steps-list li {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+    margin: 0.5rem 0;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
