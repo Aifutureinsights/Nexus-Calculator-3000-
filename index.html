@@ -120,6 +120,8 @@
                         this.recognition.start();
                         this.status.textContent = "AI: Listening...";
                     });
+                } else {
+                    this.status.textContent = "Voice not supported";
                 }
             }
 
@@ -135,7 +137,7 @@
 
             solveEquation(equation) {
                 try {
-                    const result = math.evaluate(equation);
+                    const result = eval(equation);
                     this.display.textContent = result;
                     this.speak(`The result is ${result}`);
                 } catch {
