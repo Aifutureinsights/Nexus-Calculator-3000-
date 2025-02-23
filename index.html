@@ -3,16 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Calculator 3000</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NEXUS 3000</title>
+    <style>
+        /* CYBERPUNK STYLES */
+        :root {
+            --neon-blue: #00f3ff;
+            --matrix-green: #0f0;
+            --hacker-red: #ff003c;
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 3D BACKGROUND */
+        #hologram-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* CALCULATOR INTERFACE */
+        .nexus-ui {
+            position: relative;
+            z-index: 9999;
+            width: 90%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(0,0,0,0.95);
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,243,255,0.3);
+        }
+
+        .display {
+            font-size: 2.5em;
+            color: var(--neon-blue);
+            text-align: right;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid var(--matrix-green);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.2em;
+            background: #000;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        .crypto-feed {
+            color: var(--matrix-green);
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-    <div class="calculator">
-        <div id="hologram-bg"></div>
+    <canvas id="hologram-bg"></canvas>
+    
+    <div class="nexus-ui">
         <div class="display" id="display">0</div>
         <div class="buttons" id="buttons"></div>
-        <div id="crypto-feed">Loading crypto data...</div>
+        <div class="crypto-feed" id="crypto-feed"></div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // =====================
+        // 3D HOLOGRAM BACKGROUND
+        // =====================
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('hologram-bg'),
+            alpha: true 
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.IcosahedronGeometry(2);
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0x00ff00,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+        
+        const hologram = new THREE.Mesh(geometry, material);
+        scene.add(hologram);
+        camera.position.z = 5;
+
+        const animate = () => {
+            requestAnimationFrame(animate);
+            hologram.rotation.x += 0.01;
+            hologram.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        // =====================
+        // CALCULATOR CORE
+        // =====================
+        const display = document.getElementById('display');
+        const buttons = [
+            '7','8','9','/',
+            '4','5','6','*',
+            '1','2','3','-',
+            'C','0','=','+'
+        ];
+
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.textContent = btn;
+            button.onclick = () => handleInput(btn);
+            document.getElementById('buttons').appendChild(button);
+        });
+
+        function handleInput(value) {
+            if(value === 'C') display.textContent = '0';
+            else if(value === '=') calculate();
+            else display.textContent = 
+                display.textContent === '0' ? value : display.textContent + value;
+        }
+
+        function calculate() {
+            try {
+                display.textContent = math.evaluate(display.textContent);
+            } catch {
+                display.textContent = 'ERROR';
+            }
+        }
+
+        // =====================
+        // LIVE CRYPTO PRICES
+        // =====================
+        async function loadCryptoPrices() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+                const data = await response.json();
+                document.getElementById('crypto-feed').textContent = 
+                    `BTC: $${data.bitcoin.usd}`;
+            } catch {
+                document.getElementById('crypto-feed').textContent = "Live data unavailable";
+            }
+        }
+        loadCryptoPrices();
+    </script>
 </body>
 </html>
