@@ -6,10 +6,19 @@ class VoiceAI {
     }
 
     configureVoice() {
+        if (!this.recognition) {
+            alert("Voice recognition is not supported in this browser. Please use Google Chrome.");
+            return;
+        }
+
         this.recognition.continuous = true;
         this.recognition.interimResults = true;
         this.recognition.lang = 'en-US';
         this.recognition.onresult = (event) => this.handleVoiceInput(event);
+        this.recognition.onerror = (event) => {
+            console.error("Voice recognition error:", event.error);
+            alert("Error with voice recognition. Please try again.");
+        };
     }
 
     handleVoiceInput(event) {
@@ -26,19 +35,25 @@ class VoiceAI {
         const calculator = new NexusCalculator();
         if (command.includes('calculate')) {
             const equation = command.replace('calculate', '').trim();
-            const { result, steps } = calculator.calculate(equation);
+            try {
+                const { result, steps } = calculator.calculate(equation);
 
-            // Display steps in the UI
-            const stepsList = document.getElementById('steps-list');
-            stepsList.innerHTML = '';
-            steps.forEach(step => {
-                const li = document.createElement('li');
-                li.textContent = step;
-                stepsList.appendChild(li);
-            });
+                // Display steps in the UI
+                const stepsList = document.getElementById('steps-list');
+                stepsList.innerHTML = '';
+                steps.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    stepsList.appendChild(li);
+                });
 
-            const response = new SpeechSynthesisUtterance(`The result is ${result}`);
-            this.synth.speak(response);
+                const response = new SpeechSynthesisUtterance(`The result is ${result}`);
+                this.synth.speak(response);
+            } catch (error) {
+                alert('Invalid calculation.');
+            }
+        } else {
+            alert('Command not recognized. Try saying "Calculate 2 + 2".');
         }
     }
 }
