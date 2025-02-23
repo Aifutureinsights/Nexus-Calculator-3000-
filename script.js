@@ -1,55 +1,57 @@
 class NexusCalculator {
     constructor() {
         this.display = document.getElementById('display');
-        this.initInterface();
+        this.speechSynthesis = window.speechSynthesis;
+        this.initCalculator();
         this.initHologram();
-        this.initDataStream();
+        this.loadCryptoPrices();
     }
 
-    initInterface() {
+    initCalculator() {
         const buttons = [
-            '7','8','9','/','C',
-            '4','5','6','*','⌫',
-            '1','2','3','-','π',
-            '0','.','=','+','√'
+            '7','8','9','/',
+            '4','5','6','*',
+            '1','2','3','-',
+            'C','0','=','+'
         ];
 
         buttons.forEach(btn => {
             const button = document.createElement('button');
-            button.className = 'cyber-btn';
             button.textContent = btn;
-            button.addEventListener('click', () => this.handleInput(btn));
+            button.onclick = () => this.handleInput(btn);
             document.getElementById('buttons').appendChild(button);
         });
     }
 
     handleInput(value) {
-        if(value === 'C') this.clearDisplay();
-        else if(value === '⌫') this.backspace();
-        else if(value === '=') this.calculate();
-        else this.updateDisplay(value);
-    }
-
-    updateDisplay(value) {
-        this.display.textContent = this.display.textContent === '0' ? value : this.display.textContent + value;
+        if(value === 'C') {
+            this.display.textContent = '0';
+        } else if(value === '=') {
+            this.calculate();
+        } else {
+            this.display.textContent = 
+                this.display.textContent === '0' ? value : this.display.textContent + value;
+        }
+        this.speak(value);
     }
 
     calculate() {
         try {
             this.display.textContent = math.evaluate(this.display.textContent);
+            this.speak(`The result is ${this.display.textContent}`);
         } catch {
             this.display.textContent = 'ERROR';
+            this.speak("Error in calculation");
         }
     }
 
-    async initDataStream() {
+    async loadCryptoPrices() {
         try {
             const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
             const data = await response.json();
-            document.getElementById('live-feed').textContent = 
-                `BTC: $${data.bitcoin.usd} | ETH: $${data.ethereum?.usd || 'N/A'}`;
+            document.getElementById('crypto-feed').textContent = `BTC: $${data.bitcoin.usd}`;
         } catch {
-            document.getElementById('live-feed').textContent = "Quantum data stream offline";
+            document.getElementById('crypto-feed').textContent = "Live data unavailable";
         }
     }
 
@@ -62,13 +64,14 @@ class NexusCalculator {
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        const geometry = new THREE.IcosahedronGeometry(3);
+        const geometry = new THREE.IcosahedronGeometry(2);
         const material = new THREE.MeshBasicMaterial({ 
             color: 0x00ff00,
             wireframe: true,
             transparent: true,
-            opacity: 0.2
+            opacity: 0.15
         });
+        
         const hologram = new THREE.Mesh(geometry, material);
         scene.add(hologram);
         camera.position.z = 5;
@@ -81,7 +84,13 @@ class NexusCalculator {
         };
         animate();
     }
+
+    speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = this.speechSynthesis.getVoices()[0];
+        this.speechSynthesis.speak(utterance);
+    }
 }
 
-// Initialize
-window.addEventListener('load', () => new NexusCalculator());
+// Start System
+window.onload = () => new NexusCalculator();
