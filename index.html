@@ -10,12 +10,25 @@
     <script src="https://aifutureinsights.github.io/Nexus-Calculator-3000-/main.js" defer></script>
 </head>
 <body>
+    <!-- Iron Man Intro -->
+    <div id="ironman-intro">
+        <video autoplay muted>
+            <source src="https://aifutureinsights.github.io/Nexus-Calculator-3000-/assets/ironman.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Main Interface -->
     <canvas id="hologram-bg"></canvas>
     
     <div class="nexus-ui">
         <div class="hologram-display" id="display">0</div>
         <div class="button-matrix" id="buttons"></div>
         <div class="data-stream" id="live-feed"></div>
+    </div>
+
+    <!-- Crypto Sidebar -->
+    <div class="crypto-sidebar">
+        <div class="crypto-ticker" id="crypto-ticker"></div>
     </div>
 </body>
 </html>
