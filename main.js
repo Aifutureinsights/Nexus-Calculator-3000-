@@ -1,6 +1,3 @@
-// Debugging
-console.log("NEXUS 3000 Initialized");
-
 // =====================
 // 3D HOLOGRAM BACKGROUND
 // =====================
