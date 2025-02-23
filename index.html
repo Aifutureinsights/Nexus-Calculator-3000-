@@ -3,42 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 NEXUS CALCULATOR 3000 🔥</title>
-    <!-- Styles -->
-    <link rel="stylesheet" href="neon.css">
-    <!-- External Libraries -->
+    <title>🔥 NEXUS 3000 🔥</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
 </head>
 <body>
-    <div id="hologram-container"></div>
-    <canvas id="tron-grid"></canvas>
+    <canvas id="hologram-bg"></canvas>
+    
+    <div class="nexus-ui">
+        <div class="hologram-display" id="display">0</div>
+        <div class="button-matrix" id="buttons"></div>
+        <div class="data-stream" id="live-feed"></div>
+    </div>
 
-    <main class="nexus-interface">
-        <!-- Boot Sequence -->
-        <div class="supercomputer-boot">
-            <div class="boot-loader"></div>
-            <p class="neon-text">Initializing Nexus Calculator 3000...</p>
-        </div>
-
-        <!-- Calculator Interface -->
-        <div class="calculator-main hidden">
-            <input type="text" id="calc-input" placeholder="Enter calculation..." />
-            <button id="calc-button" class="cyber-button">Calculate</button>
-            <ul id="steps-list"></ul>
-        </div>
-
-        <!-- Live Data Feed -->
-        <div class="live-data-feed">
-            <p id="crypto-price" class="neon-text">Loading crypto prices...</p>
-        </div>
-    </main>
-
-    <!-- Scripts -->
-    <script src="threejs-effects.js"></script>
-    <script src="calculator-core.js"></script>
-    <script src="voice-ai.js"></script>
-    <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
