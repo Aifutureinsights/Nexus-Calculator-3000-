@@ -1,64 +1,61 @@
-/* CYBERPUNK CORE */
-:root {
-    --neon-blue: #00f3ff;
-    --matrix-green: #0f0;
-    --hacker-red: #ff003c;
-    --cyber-black: #000;
+/* 3D Background Fix */
+#hologram-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.3;
 }
 
-body {
-    margin: 0;
-    background: var(--cyber-black);
-    font-family: 'Courier New', monospace;
-    height: 100vh;
-    overflow: hidden;
-}
-
+/* Calculator Interface */
 .nexus-container {
+    position: relative;
+    z-index: 9999;
     width: 95%;
     max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(0,0,0,0.95);
-    border: 2px solid var(--neon-blue);
+    margin: 50px auto;
+    padding: 25px;
+    background: rgba(0,0,0,0.97);
+    border: 3px solid #00f3ff;
     border-radius: 15px;
-    box-shadow: 0 0 50px var(--neon-blue);
+    box-shadow: 0 0 50px rgba(0,243,255,0.4);
+    backdrop-filter: blur(10px);
 }
 
 .hologram-display {
     font-size: 3em;
-    color: var(--neon-blue);
+    color: #00f3ff;
     text-align: right;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid var(--matrix-green);
-    text-shadow: 0 0 10px var(--neon-blue);
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 2px solid #0f0;
+    text-shadow: 0 0 15px #00f3ff;
 }
 
 .button-matrix {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 15px;
 }
 
 .cyber-btn {
     padding: 20px;
-    font-size: 1.2em;
+    font-size: 1.3em;
     background: rgba(0,0,0,0.8);
-    border: 1px solid var(--neon-blue);
-    color: var(--neon-blue);
+    border: 2px solid #00f3ff;
+    color: #00f3ff;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .cyber-btn:hover {
-    background: var(--neon-blue);
+    background: #00f3ff;
     color: #000;
-    box-shadow: 0 0 20px var(--neon-blue);
+    box-shadow: 0 0 25px #00f3ff;
 }
 
 .data-stream {
-    color: var(--matrix-green);
-    margin-top: 15px;
-    font-size: 0.9em;
+    color: #0f0;
+    margin-top: 20px;
+    font-size: 1.1em;
 }
