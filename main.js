@@ -97,9 +97,29 @@ function backspace() {
 
 function calculate() {
     try {
-        display.textContent = math.evaluate(display.textContent);
+        const expression = display.textContent;
+        const result = math.evaluate(expression);
+
+        // Generate steps
+        const steps = [];
+        const parsed = math.parse(expression);
+        const compiled = parsed.compile();
+        steps.push(`Expression: ${expression}`);
+        steps.push(`Result: ${result}`);
+
+        // Display steps
+        const liveFeed = document.getElementById('live-feed');
+        liveFeed.innerHTML = '';
+        steps.forEach(step => {
+            const div = document.createElement('div');
+            div.textContent = step;
+            liveFeed.appendChild(div);
+        });
+
+        display.textContent = result;
     } catch {
         display.textContent = 'ERROR';
+        alert('Invalid calculation.');
     }
 }
 
@@ -117,6 +137,11 @@ recognition.onresult = (event) => {
         display.textContent = equation;
         calculate();
     }
+};
+
+recognition.onerror = (event) => {
+    console.error("Voice recognition error:", event.error);
+    alert("Error with voice recognition. Please try again.");
 };
 
 recognition.start();
