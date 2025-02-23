@@ -4,11 +4,11 @@
 const intro = document.getElementById('ironman-intro');
 const nexusUI = document.querySelector('.nexus-ui');
 
-intro.querySelector('video').onended = () => {
+setTimeout(() => {
     intro.style.display = 'none';
     nexusUI.style.display = 'block';
     speak("Welcome to Nexus Calculator 3000");
-};
+}, 5000); // 5-second intro
 
 // =====================
 // J.A.R.V.I.S. VOICE
