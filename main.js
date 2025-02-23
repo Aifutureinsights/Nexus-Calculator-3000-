@@ -1,14 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const calculator = new NexusCalculator();
-    const voiceAI = new VoiceAI();
+    const bootLoader = document.querySelector('.boot-loader');
+    const bootText = document.querySelector('.neon-text');
+    const calculatorMain = document.querySelector('.calculator-main');
+
+    // Simulate boot sequence
+    setTimeout(() => {
+        bootLoader.style.display = 'none';
+        bootText.textContent = 'System Online.';
+        setTimeout(() => {
+            bootText.style.display = 'none';
+            calculatorMain.classList.remove('hidden');
+            calculatorMain.style.display = 'block';
+        }, 1000);
+    }, 3000);
 
     // Initialize Three.js effects
     new HologramEffect();
+
+    // Fetch live crypto price
+    fetchCryptoPrice();
 
     // Button click event
     document.getElementById('calc-button').addEventListener('click', () => {
         const input = document.getElementById('calc-input').value;
         try {
+            const calculator = new NexusCalculator();
             const { result, steps } = calculator.calculate(input);
 
             // Display steps
@@ -23,9 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Invalid calculation.');
         }
     });
-
-    // Fetch live crypto price
-    fetchCryptoPrice();
 });
 
 async function fetchCryptoPrice() {
