@@ -1,25 +1,4 @@
 // =====================
-// IRON MAN INTRO
-// =====================
-const intro = document.getElementById('ironman-intro');
-const nexusUI = document.querySelector('.nexus-ui');
-
-setTimeout(() => {
-    intro.style.display = 'none';
-    nexusUI.style.display = 'block';
-    speak("Welcome to Nexus Calculator 3000");
-}, 5000); // 5-second intro
-
-// =====================
-// J.A.R.V.I.S. VOICE
-// =====================
-function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = speechSynthesis.getVoices().find(v => v.name.includes('Zira'));
-    speechSynthesis.speak(utterance);
-}
-
-// =====================
 // 3D HOLOGRAM BACKGROUND
 // =====================
 const scene = new THREE.Scene();
@@ -82,6 +61,23 @@ function calculate() {
         display.textContent = 'ERROR';
     }
 }
+
+// =====================
+// VOICE AI INTEGRATION
+// =====================
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.continuous = true;
+recognition.lang = 'en-US';
+
+recognition.onresult = (event) => {
+    const command = event.results[0][0].transcript.toLowerCase();
+    if(command.includes('calculate')) {
+        const equation = command.replace('calculate', '').trim();
+        display.textContent = equation;
+        calculate();
+    }
+};
+recognition.start();
 
 // =====================
 // LIVE CRYPTO PRICES
