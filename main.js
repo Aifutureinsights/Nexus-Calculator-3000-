@@ -1,4 +1,25 @@
 // =====================
+// IRON MAN INTRO
+// =====================
+const intro = document.getElementById('ironman-intro');
+const nexusUI = document.querySelector('.nexus-ui');
+
+intro.querySelector('video').onended = () => {
+    intro.style.display = 'none';
+    nexusUI.style.display = 'block';
+    speak("Welcome to Nexus Calculator 3000");
+};
+
+// =====================
+// J.A.R.V.I.S. VOICE
+// =====================
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = speechSynthesis.getVoices().find(v => v.name.includes('Zira'));
+    speechSynthesis.speak(utterance);
+}
+
+// =====================
 // 3D HOLOGRAM BACKGROUND
 // =====================
 const scene = new THREE.Scene();
@@ -63,35 +84,18 @@ function calculate() {
 }
 
 // =====================
-// VOICE AI INTEGRATION
-// =====================
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.continuous = true;
-recognition.lang = 'en-US';
-
-recognition.onresult = (event) => {
-    const command = event.results[0][0].transcript.toLowerCase();
-    if(command.includes('calculate')) {
-        const equation = command.replace('calculate', '').trim();
-        display.textContent = equation;
-        calculate();
-    }
-};
-recognition.start();
-
-// =====================
 // LIVE CRYPTO PRICES
 // =====================
 async function updateCryptoPrices() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
         const data = await response.json();
-        document.getElementById('live-feed').innerHTML = `
+        document.getElementById('crypto-ticker').innerHTML = `
             <div>BTC: $${data.bitcoin.usd}</div>
             <div>ETH: $${data.ethereum.usd}</div>
         `;
     } catch {
-        document.getElementById('live-feed').textContent = "Quantum data stream offline";
+        document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
     }
 }
 setInterval(updateCryptoPrices, 10000);
