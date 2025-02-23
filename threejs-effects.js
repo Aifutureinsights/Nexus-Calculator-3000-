@@ -22,3 +22,6 @@ class HologramEffect {
         this.renderer.render(this.scene, this.camera);
     }
 }
+
+// Initialize the hologram effect
+new HologramEffect();
