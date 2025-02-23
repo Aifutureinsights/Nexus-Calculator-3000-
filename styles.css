@@ -1,0 +1,64 @@
+/* CYBERPUNK CORE */
+:root {
+    --neon-blue: #00f3ff;
+    --matrix-green: #0f0;
+    --hacker-red: #ff003c;
+    --cyber-black: #000;
+}
+
+body {
+    margin: 0;
+    background: var(--cyber-black);
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.nexus-container {
+    width: 95%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(0,0,0,0.95);
+    border: 2px solid var(--neon-blue);
+    border-radius: 15px;
+    box-shadow: 0 0 50px var(--neon-blue);
+}
+
+.hologram-display {
+    font-size: 3em;
+    color: var(--neon-blue);
+    text-align: right;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--matrix-green);
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.button-matrix {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.cyber-btn {
+    padding: 20px;
+    font-size: 1.2em;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cyber-btn:hover {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.data-stream {
+    color: var(--matrix-green);
+    margin-top: 15px;
+    font-size: 0.9em;
+}
