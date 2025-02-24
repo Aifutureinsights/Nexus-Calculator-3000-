@@ -90,7 +90,7 @@ body {
     margin-bottom: 20px;
 }
 
-.question-display, .answer-display {
+.question-display {
     font-size: 1.5rem;
     color: var(--matrix-green);
     text-align: right;
@@ -99,10 +99,19 @@ body {
     border-radius: 10px;
     margin-bottom: 10px;
     text-shadow: 0 0 10px var(--neon-blue);
+    background: rgba(0, 0, 0, 0.8);
+    resize: none;
+    outline: none;
 }
 
 .answer-display {
+    font-size: 1.5rem;
     color: var(--neon-blue);
+    text-align: right;
+    padding: 10px;
+    border: 2px solid var(--neon-blue);
+    border-radius: 10px;
+    text-shadow: 0 0 10px var(--neon-blue);
 }
 
 /* NEURAL BUTTON MATRIX */
@@ -131,6 +140,27 @@ button:hover {
 
 button:active {
     transform: scale(0.95);
+}
+
+/* Voice Button */
+.voice-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 1.5em;
+    background: var(--neon-blue);
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 40px var(--neon-blue);
+    transition: all 0.2s;
+}
+
+.voice-button:hover {
+    transform: scale(1.1);
 }
 
 /* CRYPTO SIDEBAR */
