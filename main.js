@@ -1,28 +1,27 @@
 // =====================
-// IRON MAN INTRO
+// LOADING AND WELCOME SCREEN
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
-    const ironManIntro = document.querySelector('.ironman-intro');
-    const bootLoader = document.querySelector('.boot-loader');
-    const bootText = document.querySelector('.supercomputer-boot .neon-text');
+    const loadingScreen = document.querySelector('.loading-screen');
+    const welcomeScreen = document.querySelector('.welcome-screen');
     const calculatorMain = document.querySelector('.nexus-ui');
 
-    // Play Iron Man intro
+    // Simulate loading screen
     setTimeout(() => {
-        ironManIntro.classList.add('hidden');
-        document.querySelector('.supercomputer-boot').classList.remove('hidden');
-    }, 3000);
+        loadingScreen.classList.add('hidden');
+        welcomeScreen.classList.remove('hidden');
 
-    // Simulate boot sequence
-    setTimeout(() => {
-        bootLoader.style.display = 'none';
-        bootText.textContent = 'System Online.';
+        // Play welcome voice
+        const welcomeAudio = new Audio('https://www.soundjay.com/misc/sounds/welcome-voice.mp3');
+        welcomeAudio.play();
+
+        // Transition to calculator UI
         setTimeout(() => {
-            bootText.style.display = 'none';
+            welcomeScreen.classList.add('hidden');
             calculatorMain.classList.remove('hidden');
             calculatorMain.style.display = 'block';
-        }, 1000);
-    }, 6000);
+        }, 3000);
+    }, 3000);
 
     // Initialize hologram effect
     initHologram();
@@ -68,7 +67,8 @@ function initHologram() {
 // =====================
 // CALCULATOR CORE
 // =====================
-const display = document.getElementById('display');
+const questionDisplay = document.getElementById('question-display');
+const answerDisplay = document.getElementById('answer-display');
 
 function initButtons() {
     const buttons = [
@@ -88,23 +88,20 @@ function initButtons() {
 
 function handleInput(value) {
     if (value === 'C') {
-        display.textContent = '0';
+        questionDisplay.textContent = '';
+        answerDisplay.textContent = '';
     } else if (value === '⌫') {
-        backspace();
+        questionDisplay.textContent = questionDisplay.textContent.slice(0, -1);
     } else if (value === '=') {
         calculate();
     } else {
-        display.textContent = display.textContent === '0' ? value : display.textContent + value;
+        questionDisplay.textContent += value;
     }
-}
-
-function backspace() {
-    display.textContent = display.textContent.slice(0, -1) || '0';
 }
 
 function calculate() {
     try {
-        const expression = display.textContent;
+        const expression = questionDisplay.textContent;
         const result = math.evaluate(expression);
 
         // Generate steps
@@ -123,9 +120,9 @@ function calculate() {
             liveFeed.appendChild(div);
         });
 
-        display.textContent = result;
+        answerDisplay.textContent = result;
     } catch {
-        display.textContent = 'ERROR';
+        answerDisplay.textContent = 'ERROR';
         alert('Invalid calculation.');
     }
 }
@@ -141,7 +138,7 @@ recognition.onresult = (event) => {
     const command = event.results[0][0].transcript.toLowerCase();
     if (command.includes('calculate')) {
         const equation = command.replace('calculate', '').trim();
-        display.textContent = equation;
+        questionDisplay.textContent = equation;
         calculate();
     }
 };
