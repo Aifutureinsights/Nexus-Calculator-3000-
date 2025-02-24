@@ -15,8 +15,8 @@ body {
     overflow: hidden;
 }
 
-/* Iron Man Intro */
-.ironman-intro {
+/* Loading Screen */
+.loading-screen {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -25,27 +25,7 @@ body {
     z-index: 999;
 }
 
-.ironman-fly {
-    width: 200px;
-    animation: fly-in 2s ease-out forwards;
-}
-
-@keyframes fly-in {
-    0% { transform: translateY(100vh); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-/* Boot Sequence */
-.supercomputer-boot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-}
-
-.boot-loader {
+.loader {
     width: 50px;
     height: 50px;
     border: 5px solid var(--neon-blue);
@@ -61,6 +41,22 @@ body {
 
 .hidden {
     display: none;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 999;
+}
+
+.welcome-screen .neon-text {
+    font-size: 2rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 20px var(--neon-blue);
 }
 
 /* 3D Background */
@@ -90,21 +86,23 @@ body {
     display: none;
 }
 
-/* J.A.R.V.I.S. DISPLAY */
-.hologram-display {
-    font-size: 3.5em;
-    color: var(--neon-blue);
-    text-align: right;
-    padding: 25px;
-    margin-bottom: 30px;
-    border: 2px solid var(--matrix-green);
-    text-shadow: 0 0 30px var(--neon-blue);
-    animation: hologram-float 3s infinite;
+.display-container {
+    margin-bottom: 20px;
 }
 
-@keyframes hologram-float {
-    0%, 100% { transform: translateY(0) rotateX(5deg); }
-    50% { transform: translateY(-10px) rotateX(7deg); }
+.question-display, .answer-display {
+    font-size: 1.5rem;
+    color: var(--matrix-green);
+    text-align: right;
+    padding: 10px;
+    border: 2px solid var(--neon-blue);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.answer-display {
+    color: var(--neon-blue);
 }
 
 /* NEURAL BUTTON MATRIX */
