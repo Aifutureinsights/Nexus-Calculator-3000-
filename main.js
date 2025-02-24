@@ -1,10 +1,17 @@
 // =====================
-// BOOT SEQUENCE
+// IRON MAN INTRO
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
+    const ironManIntro = document.querySelector('.ironman-intro');
     const bootLoader = document.querySelector('.boot-loader');
-    const bootText = document.querySelector('.neon-text');
+    const bootText = document.querySelector('.supercomputer-boot .neon-text');
     const calculatorMain = document.querySelector('.nexus-ui');
+
+    // Play Iron Man intro
+    setTimeout(() => {
+        ironManIntro.classList.add('hidden');
+        document.querySelector('.supercomputer-boot').classList.remove('hidden');
+    }, 3000);
 
     // Simulate boot sequence
     setTimeout(() => {
@@ -15,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             calculatorMain.classList.remove('hidden');
             calculatorMain.style.display = 'block';
         }, 1000);
-    }, 3000);
+    }, 6000);
 
     // Initialize hologram effect
     initHologram();
