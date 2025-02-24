@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize buttons
     initButtons();
+
+    // Voice Recognition
+    const voiceButton = document.getElementById('voice-button');
+    voiceButton.addEventListener('click', startVoiceRecognition);
 });
 
 // =====================
@@ -88,20 +92,20 @@ function initButtons() {
 
 function handleInput(value) {
     if (value === 'C') {
-        questionDisplay.textContent = '';
+        questionDisplay.value = '';
         answerDisplay.textContent = '';
     } else if (value === '⌫') {
-        questionDisplay.textContent = questionDisplay.textContent.slice(0, -1);
+        questionDisplay.value = questionDisplay.value.slice(0, -1);
     } else if (value === '=') {
         calculate();
     } else {
-        questionDisplay.textContent += value;
+        questionDisplay.value += value;
     }
 }
 
 function calculate() {
     try {
-        const expression = questionDisplay.textContent;
+        const expression = questionDisplay.value;
         const result = math.evaluate(expression);
 
         // Generate steps
@@ -130,38 +134,4 @@ function calculate() {
 // =====================
 // VOICE AI INTEGRATION
 // =====================
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.continuous = true;
-recognition.lang = 'en-US';
-
-recognition.onresult = (event) => {
-    const command = event.results[0][0].transcript.toLowerCase();
-    if (command.includes('calculate')) {
-        const equation = command.replace('calculate', '').trim();
-        questionDisplay.textContent = equation;
-        calculate();
-    }
-};
-
-recognition.onerror = (event) => {
-    console.error("Voice recognition error:", event.error);
-    alert("Error with voice recognition. Please try again.");
-};
-
-recognition.start();
-
-// =====================
-// LIVE CRYPTO PRICES
-// =====================
-async function updateCryptoPrices() {
-    try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
-        const data = await response.json();
-        document.getElementById('crypto-ticker').innerHTML = `
-            <div>BTC: $${data.bitcoin.usd}</div>
-            <div>ETH: $${data.ethereum.usd}</div>
-        `;
-    } catch {
-        document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
-    }
-}
+function startVoice
