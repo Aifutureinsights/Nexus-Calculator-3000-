@@ -160,4 +160,4 @@ async function updateCryptoPrices() {
     } catch {
         document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
     }
-                  }
+}
