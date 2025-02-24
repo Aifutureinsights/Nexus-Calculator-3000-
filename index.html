@@ -12,16 +12,15 @@
     <script src="./main.js" defer></script>
 </head>
 <body>
-    <!-- Iron Man Intro -->
-    <div class="ironman-intro">
-        <img src="https://i.imgur.com/7QZz1vW.png" alt="Iron Man" class="ironman-fly">
-        <p class="neon-text">Welcome to Nexus Calculator 3000</p>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader"></div>
+        <p class="neon-text">Initializing Nexus Calculator...</p>
     </div>
 
-    <!-- Boot Sequence -->
-    <div class="supercomputer-boot hidden">
-        <div class="boot-loader"></div>
-        <p class="neon-text">Initializing Nexus Calculator 3000...</p>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen hidden">
+        <p class="neon-text">Welcome to Nexus Calculator</p>
     </div>
 
     <!-- 3D Background -->
@@ -29,7 +28,10 @@
 
     <!-- Calculator Interface -->
     <div class="nexus-ui hidden">
-        <div class="hologram-display" id="display">0</div>
+        <div class="display-container">
+            <div class="question-display" id="question-display">Enter your equation here...</div>
+            <div class="answer-display" id="answer-display">Result will appear here...</div>
+        </div>
         <div class="button-matrix" id="buttons"></div>
         <div class="data-stream" id="live-feed"></div>
     </div>
