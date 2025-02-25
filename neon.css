@@ -93,6 +93,36 @@ body {
     display: none;
 }
 
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: rgba(0, 17, 34, 0.9);
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-button.active {
+    background: var(--matrix-green);
+    color: #000;
+    box-shadow: 0 0 40px var(--matrix-green);
+}
+
+.tab-content {
+    display: block;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+
 .display-container {
     margin-bottom: 20px;
 }
