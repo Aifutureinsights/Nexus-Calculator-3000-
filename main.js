@@ -25,9 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize tabs
     initTabs();
+    initSubTabs();
 
     // Initialize buttons
     initButtons();
+
+    // Fetch live crypto prices
+    updateCryptoPrices();
+    setInterval(updateCryptoPrices, 10000);
 });
 
 // =====================
@@ -49,6 +54,26 @@ function initTabs() {
             // Show the selected tab content
             const tabId = button.getAttribute('data-tab');
             document.getElementById(tabId).classList.remove('hidden');
+        });
+    });
+}
+
+function initSubTabs() {
+    const subTabButtons = document.querySelectorAll('.sub-tab-button');
+    const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+    subTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            subTabButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            // Hide all sub-tab contents
+            subTabContents.forEach(content => content.classList.add('hidden'));
+            // Show the selected sub-tab content
+            const subTabId = button.getAttribute('data-subtab');
+            document.getElementById(subTabId).classList.remove('hidden');
         });
     });
 }
@@ -195,3 +220,76 @@ document.querySelector('.plot-button').addEventListener('click', () => {
         }
     });
 });
+
+// =====================
+// HEALTH CALCULATOR
+// =====================
+document.getElementById('calculate-bmi').addEventListener('click', () => {
+    const weight = parseFloat(document.getElementById('bmi-weight').value);
+    const height = parseFloat(document.getElementById('bmi-height').value) / 100;
+    const bmiOutput = document.getElementById('bmi-output');
+
+    if (!weight || !height) {
+        bmiOutput.textContent = 'Please enter valid values.';
+        return;
+    }
+
+    const bmi = (weight / (height * height)).toFixed(2);
+    bmiOutput.textContent = `BMI: ${bmi}`;
+});
+
+document.getElementById('calculate-calories').addEventListener('click', () => {
+    const age = parseFloat(document.getElementById('calories-age').value);
+    const weight = parseFloat(document.getElementById('calories-weight').value);
+    const height = parseFloat(document.getElementById('calories-height').value);
+    const gender = document.getElementById('calories-gender').value;
+    const caloriesOutput = document.getElementById('calories-output');
+
+    if (!age || !weight || !height) {
+        caloriesOutput.textContent = 'Please enter valid values.';
+        return;
+    }
+
+    let bmr;
+    if (gender === 'male') {
+        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+    } else {
+        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    }
+
+    caloriesOutput.textContent = `Daily Calories: ${Math.round(bmr)}`;
+});
+
+// =====================
+// AGE CALCULATOR
+// =====================
+document.getElementById('calculate-age').addEventListener('click', () => {
+    const startDate = new Date(document.getElementById('start-date').value);
+    const endDate = new Date(document.getElementById('end-date').value);
+    const ageOutput = document.getElementById('age-output');
+
+    if (!startDate || !endDate) {
+        ageOutput.textContent = 'Please select valid dates.';
+        return;
+    }
+
+    const diffTime = Math.abs(endDate - startDate);
+    const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
+    ageOutput.textContent = `Age Difference: ${diffYears} years`;
+});
+
+// =====================
+// CRYPTO PRICES
+// =====================
+async function updateCryptoPrices() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+        const data = await response.json();
+        document.getElementById('crypto-ticker').innerHTML = `
+            <div>BTC: $${data.bitcoin.usd}</div>
+            <div>ETH: $${data.ethereum.usd}</div>
+        `;
+    } catch {
+        document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
+    }
+            }
