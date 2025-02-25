@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 NEXUS CALCULATOR 3000 🔥</title>
+    <title>🔥 NEXUS AI CALCULATOR 3000 🔥</title>
     <!-- Styles -->
     <link rel="stylesheet" href="./neon.css">
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Quantico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,20 +15,23 @@
     <script src="./main.js" defer></script>
 </head>
 <body>
+    <!-- Holographic Background -->
+    <div class="holographic-effect"></div>
+    <div class="particle-network"></div>
+
     <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="loader"></div>
-        <p class="neon-text">Initializing Nexus Calculator...</p>
+        <p class="neon-text">Initializing Neural Network...</p>
     </div>
 
-    <!-- Welcome Screen -->
-    <div class="welcome-screen hidden">
-        <p class="neon-text">Welcome to Nexus Calculator</p>
-    </div>
-
-    <!-- Calculator Interface -->
+    <!-- Main Interface -->
     <div class="nexus-ui hidden">
-        <h1 class="nexus-title">NEXUS</h1>
+        <!-- Header -->
+        <div class="ai-header">
+            <h1 class="nexus-title">NEXUS AI</h1>
+            <div class="voice-status" id="voice-status"></div>
+        </div>
 
         <!-- Navigation Tabs -->
         <div class="tabs">
@@ -114,15 +117,23 @@
                 <div class="refresh-button" onclick="updateCryptoPrices()">⟳ Refresh</div>
             </div>
         </div>
+
+        <!-- AI Assistant -->
+        <div class="ai-assistant">
+            <div class="ai-chat" id="ai-chat"></div>
+            <div class="ai-controls">
+                <button class="ai-button" id="ai-trigger">🤖</button>
+                <input type="text" id="ai-input" placeholder="Ask NEXUS...">
+            </div>
+        </div>
     </div>
 
     <!-- Voice Interface -->
     <div class="voice-interface">
-        <div class="jarvis-response" id="jarvis-response"></div>
+        <div class="pulse-ring"></div>
         <button class="voice-command-btn" id="voice-command">
-            <div class="pulse-ring"></div>
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMTRjMS42NiAwIDMtMS4zNCAzLTNWNWMwLTEuNjYtMS4zNC0zLTMtM3MtMyAxLjM0LTMgM3Y2YzAgMS42NiAxLjM0IDMgMyAzem00LjMtMTFjLS42Ni0uMzMtMS40Mi0uMjItMS45NC4yOS0uNTIuNTItLjYyIDEuMzItLjI5IDEuOTgtMS4wMS0uNDctMi4wNy0uNzYtMy4wNy0uNzYtMS4wMSAwLTIuMDYuMjktMy4wNy43Ni4zMy0uNjYuMjMtMS40Ni0uMjktMS45OC0uNTItLjUxLTEuMjgtLjYyLTEuOTQtLjI5LS44Mi40MS0xLjEyIDEuMzQtLjg0IDIuMTVDNS4yMyAxMC4xOCA1IDExLjU3IDUgMTNjMCA0Ljk3IDQuMDMgOSA5IDlzOS00LjAzIDktOWMwLTEuNDMtLjIzLTIuODUtLjY2LTQuMTcuMjgtLjgxLS4wMi0xLjc0LS44NC0yLjE1eiIvPjwvc3ZnPg==">
         </button>
     </div>
 </body>
-                </html>
+</html>
