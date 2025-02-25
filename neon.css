@@ -15,6 +15,31 @@ body {
     overflow: hidden;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nexus-ui {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .button-matrix button {
+        font-size: 1.2em;
+        padding: 20px;
+    }
+
+    .question-display, .answer-display {
+        font-size: 1.2rem;
+    }
+
+    .crypto-sidebar {
+        width: 100%;
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 20px;
+    }
+}
+
 /* Loading Screen */
 .loading-screen {
     position: fixed;
