@@ -26,45 +26,46 @@
     <!-- Calculator Interface -->
     <div class="nexus-ui hidden">
         <h1 class="nexus-title">NEXUS</h1>
-        <div class="display-container">
-            <textarea class="question-display" id="question-display" placeholder="Enter your equation here..."></textarea>
-            <div class="answer-display" id="answer-display">Result will appear here...</div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="arithmetic">Arithmetic</button>
+            <button class="tab-button" data-tab="scientific">Scientific</button>
+            <button class="tab-button" data-tab="memory">Memory</button>
+            <button class="tab-button" data-tab="solver">Solver</button>
+            <button class="tab-button" data-tab="graphing">Graphing</button>
         </div>
-        <div class="button-matrix" id="buttons">
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button>/</button>
-            <button>C</button>
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>*</button>
-            <button>⌫</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>-</button>
-            <button>π</button>
-            <button>0</button>
-            <button>.</button>
-            <button>=</button>
-            <button>+</button>
-            <button>√</button>
-            <button>sin</button>
-            <button>cos</button>
-            <button>tan</button>
-            <button>log</button>
-            <button>exp</button>
-            <button>^</button>
-            <button>M+</button>
-            <button>M-</button>
-            <button>MR</button>
-            <button>MC</button>
-            <button>Solve</button>
-            <button>Plot</button>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="arithmetic">
+            <textarea class="question-display" id="arithmetic-input" placeholder="Enter your equation here..."></textarea>
+            <div class="answer-display" id="arithmetic-output">Result will appear here...</div>
+            <div class="button-matrix" id="arithmetic-buttons"></div>
         </div>
-        <canvas id="graph-canvas" width="400" height="200"></canvas>
+
+        <div class="tab-content hidden" id="scientific">
+            <textarea class="question-display" id="scientific-input" placeholder="Enter your equation here..."></textarea>
+            <div class="answer-display" id="scientific-output">Result will appear here...</div>
+            <div class="button-matrix" id="scientific-buttons"></div>
+        </div>
+
+        <div class="tab-content hidden" id="memory">
+            <textarea class="question-display" id="memory-input" placeholder="Enter your equation here..."></textarea>
+            <div class="answer-display" id="memory-output">Result will appear here...</div>
+            <div class="button-matrix" id="memory-buttons"></div>
+        </div>
+
+        <div class="tab-content hidden" id="solver">
+            <textarea class="question-display" id="solver-input" placeholder="Enter your equation here..."></textarea>
+            <div class="answer-display" id="solver-output">Solution will appear here...</div>
+            <button class="solve-button">Solve</button>
+        </div>
+
+        <div class="tab-content hidden" id="graphing">
+            <textarea class="question-display" id="graphing-input" placeholder="Enter a function (e.g., x^2)..."></textarea>
+            <canvas id="graph-canvas" width="400" height="200"></canvas>
+            <button class="plot-button">Plot</button>
+        </div>
     </div>
 </body>
 </html>
