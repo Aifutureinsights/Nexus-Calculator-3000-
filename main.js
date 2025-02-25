@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch live crypto prices
     updateCryptoPrices();
     setInterval(updateCryptoPrices, 10000);
+
+    // Initialize voice commands
+    initVoiceCommands();
 });
 
 // =====================
@@ -155,8 +158,9 @@ function calculate(expression, outputField) {
         const result = math.evaluate(expression);
         outputField.textContent = result;
     } catch (error) {
-        outputField.textContent = 'ERROR';
-        alert('Invalid calculation.');
+        outputField.textContent = handleCalculationError(error);
+        outputField.style.animation = 'error-pulse 0.5s';
+        setTimeout(() => outputField.style.animation = '', 500);
     }
 }
 
@@ -184,8 +188,9 @@ document.querySelector('.solve-button').addEventListener('click', () => {
         const solution = math.simplify(equation).toString();
         outputField.textContent = solution;
     } catch (error) {
-        outputField.textContent = 'ERROR';
-        alert('Invalid equation.');
+        outputField.textContent = handleCalculationError(error);
+        outputField.style.animation = 'error-pulse 0.5s';
+        setTimeout(() => outputField.style.animation = '', 500);
     }
 });
 
@@ -292,4 +297,70 @@ async function updateCryptoPrices() {
     } catch {
         document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
     }
+}
+
+// =====================
+// VOICE COMMANDS
+// =====================
+let isListening = false;
+
+function initVoiceCommands() {
+    if (annyang) {
+        const commands = {
+            'calculate *expression': (expression) => {
+                const activeInput = document.querySelector('.sub-tab-content:not(.hidden) .question-display');
+                activeInput.value = expression;
+                calculate(expression, activeInput.nextElementSibling);
+                speak(`Result is ${activeInput.nextElementSibling.textContent}`);
+            },
+            'clear': () => {
+                const activeInput = document.querySelector('.sub-tab-content:not(.hidden) .question-display');
+                activeInput.value = '';
+                activeInput.nextElementSibling.textContent = '';
+                speak('Display cleared');
+            },
+            'switch to *tab': (tab) => {
+                const tabButton = [...document.querySelectorAll('.tab-button')].find(
+                    btn => btn.textContent.toLowerCase() === tab.toLowerCase()
+                );
+                if (tabButton) tabButton.click();
             }
+        };
+        annyang.addCommands(commands);
+        annyang.setLanguage('en-US');
+
+        document.getElementById('voice-command').addEventListener('click', () => {
+            if (!isListening) {
+                annyang.start();
+                document.getElementById('jarvis-response').textContent = "Listening...";
+                document.getElementById('jarvis-response').style.display = 'block';
+                isListening = true;
+            } else {
+                annyang.abort();
+                document.getElementById('jarvis-response').style.display = 'none';
+                isListening = false;
+            }
+        });
+    }
+}
+
+// Text-to-Speech
+function speak(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = synth.getVoices().find(voice => voice.name === 'Microsoft David - English (United States)');
+    synth.speak(utterance);
+}
+
+// Enhanced Error Handling
+function handleCalculationError(error) {
+    const errorMessages = {
+        'Division by zero': "Warning: Attempting to divide by zero",
+        'Undefined symbol': "Error: Unknown variable detected",
+        'Parenthesis mismatch': "Syntax Error: Parenthesis mismatch"
+    };
+
+    const message = errorMessages[error.message] || "Quantum computation error";
+    speak(message);
+    return message;
+}
