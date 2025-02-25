@@ -42,6 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // 3D HOLOGRAM BACKGROUND
 // =====================
 function initHologram() {
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        // Skip 3D effect on mobile
+        document.getElementById('hologram-bg').style.display = 'none';
+        return;
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hologram-bg'), alpha: true });
@@ -134,4 +140,45 @@ function calculate() {
 // =====================
 // VOICE AI INTEGRATION
 // =====================
-function startVoice
+function startVoiceRecognition() {
+    if (!('webkitSpeechRecognition' in window)) {
+        alert("Voice recognition is not supported on this device. Please use the buttons.");
+        return;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+        const command = event.results[0][0].transcript.toLowerCase();
+        if (command.includes('calculate')) {
+            const equation = command.replace('calculate', '').trim();
+            questionDisplay.value = equation;
+            calculate();
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Voice recognition error:", event.error);
+        alert("Error with voice recognition. Please try again.");
+    };
+
+    recognition.start();
+}
+
+// =====================
+// LIVE CRYPTO PRICES
+// =====================
+async function updateCryptoPrices() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+        const data = await response.json();
+        document.getElementById('crypto-ticker').innerHTML = `
+            <div>BTC: $${data.bitcoin.usd}</div>
+            <div>ETH: $${data.ethereum.usd}</div>
+        `;
+    } catch {
+        document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
+    }
+}
