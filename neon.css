@@ -59,13 +59,20 @@ body {
     text-shadow: 0 0 20px var(--neon-blue);
 }
 
-/* 3D Background */
-#hologram-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    opacity: 0.3;
+/* Nexus Title */
+.nexus-title {
+    font-size: 3rem;
+    color: var(--neon-blue);
+    text-align: center;
+    text-shadow: 0 0 20px var(--neon-blue);
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
 }
 
 /* HOLOGRAPHIC INTERFACE */
@@ -142,50 +149,9 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Voice Button */
-.voice-button {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 30px;
-    font-size: 1.5em;
-    background: var(--neon-blue);
-    color: #000;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 0 40px var(--neon-blue);
-    transition: all 0.2s;
-}
-
-.voice-button:hover {
-    transform: scale(1.1);
-}
-
-/* CRYPTO SIDEBAR */
-.crypto-sidebar {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 300px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid var(--neon-blue);
-    border-radius: 15px;
-    box-shadow: 0 0 30px var(--neon-blue);
-    backdrop-filter: blur(10px);
-}
-
-.crypto-ticker {
-    color: var(--matrix-green);
-    font-size: 1.2em;
-    text-shadow: 0 0 20px var(--matrix-green);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.8; }
-    50% { opacity: 1; }
-    100% { opacity: 0.8; }
+/* Graph Canvas */
+#graph-canvas {
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
 }
