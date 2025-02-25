@@ -3,25 +3,13 @@
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.querySelector('.loading-screen');
-    const welcomeScreen = document.querySelector('.welcome-screen');
-    const calculatorMain = document.querySelector('.nexus-ui');
+    const nexusUI = document.querySelector('.nexus-ui');
 
     // Simulate loading screen
     setTimeout(() => {
         loadingScreen.classList.add('hidden');
-        welcomeScreen.classList.remove('hidden');
-
-        // Play welcome voice
-        const welcomeAudio = new Audio('https://www.soundjay.com/misc/sounds/welcome-voice.mp3');
-        welcomeAudio.play();
-
-        // Transition to calculator UI
-        setTimeout(() => {
-            welcomeScreen.classList.add('hidden');
-            calculatorMain.classList.remove('hidden');
-            calculatorMain.style.display = 'block';
-        }, 3000);
-    }, 3000);
+        nexusUI.classList.remove('hidden');
+    }, 2000);
 
     // Initialize tabs
     initTabs();
@@ -35,7 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCryptoPrices, 10000);
 
     // Initialize voice commands
-    initVoiceCommands();
+    initVoiceAI();
+
+    // AI Input Handler
+    document.getElementById('ai-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const ai = new NexusAI();
+            ai.processCommand(e.target.value);
+            e.target.value = '';
+        }
+    });
 });
 
 // =====================
@@ -47,14 +44,10 @@ function initTabs() {
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove active class from all buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
             button.classList.add('active');
 
-            // Hide all tab contents
             tabContents.forEach(content => content.classList.add('hidden'));
-            // Show the selected tab content
             const tabId = button.getAttribute('data-tab');
             document.getElementById(tabId).classList.remove('hidden');
         });
@@ -67,14 +60,10 @@ function initSubTabs() {
 
     subTabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove active class from all buttons
             subTabButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
             button.classList.add('active');
 
-            // Hide all sub-tab contents
             subTabContents.forEach(content => content.classList.add('hidden'));
-            // Show the selected sub-tab content
             const subTabId = button.getAttribute('data-subtab');
             document.getElementById(subTabId).classList.remove('hidden');
         });
@@ -204,7 +193,6 @@ document.querySelector('.plot-button').addEventListener('click', () => {
     const ctx = document.getElementById('graph-canvas').getContext('2d');
     const equation = document.getElementById('graphing-input').value;
 
-    // Clear previous chart
     if (currentChart) {
         currentChart.destroy();
     }
@@ -321,12 +309,12 @@ async function updateCryptoPrices() {
 // =====================
 let isListening = false;
 
-function initVoiceCommands() {
+function initVoiceAI() {
     if (annyang) {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(() => {
                 const commands = {
-                    'calculate *expression': (expression) => {
+                    'Nexus calculate *expression': (expression) => {
                         const activeTab = document.querySelector('.tab-content:not(.hidden)');
                         const activeInput = activeTab.querySelector('.question-display');
                         expression = expression
@@ -337,16 +325,20 @@ function initVoiceCommands() {
                         activeInput.value = expression;
                         calculate(expression, activeInput.nextElementSibling);
                     },
-                    'clear': () => {
+                    'Nexus clear': () => {
                         const activeInput = document.querySelector('.question-display');
                         activeInput.value = '';
                         activeInput.nextElementSibling.textContent = '';
                     },
-                    'switch to *tab': (tab) => {
+                    'Nexus switch to *tab': (tab) => {
                         const tabButton = [...document.querySelectorAll('.tab-button')].find(
                             btn => btn.textContent.toLowerCase() === tab.toLowerCase()
                         );
                         if (tabButton) tabButton.click();
+                    },
+                    'Nexus graph *function': (func) => {
+                        document.getElementById('graphing-input').value = func;
+                        document.querySelector('.plot-button').click();
                     }
                 };
                 annyang.addCommands(commands);
@@ -358,12 +350,11 @@ function initVoiceCommands() {
         document.getElementById('voice-command').addEventListener('click', () => {
             if (!isListening) {
                 annyang.start();
-                document.getElementById('jarvis-response').textContent = "Listening...";
-                document.getElementById('jarvis-response').style.display = 'block';
+                document.getElementById('voice-status').textContent = "Listening...";
                 isListening = true;
             } else {
                 annyang.abort();
-                document.getElementById('jarvis-response').style.display = 'none';
+                document.getElementById('voice-status').textContent = "";
                 isListening = false;
             }
         });
@@ -389,4 +380,4 @@ function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = synth.getVoices().find(voice => voice.name === 'Microsoft David - English (United States)');
     synth.speak(utterance);
-            }
+                                             }
