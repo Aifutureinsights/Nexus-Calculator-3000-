@@ -1,104 +1,115 @@
-/* Core Styles */
+/* Root Variables */
 :root {
     --neon-blue: #00f3ff;
     --matrix-green: #0f0;
     --hacker-red: #ff003c;
     --cyber-black: #000;
-    --cyber-purple: #6a00ff;
 }
+
+/* Body Styling */
 body {
     margin: 0;
-    background: radial-gradient(circle at center, #000a1a, #000);
+    background: var(--cyber-black);
     font-family: 'Orbitron', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh;
+    overflow: hidden;
 }
-/* Holographic Effects */
-.holographic-effect {
+
+/* Loading Screen */
+.loading-screen {
     position: fixed;
-    width: 200vw;
-    height: 200vh;
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(0, 243, 255, 0.05) 0%,
-        rgba(0, 243, 255, 0.1) 5%,
-        transparent 10%
-    );
-    animation: scan 20s linear infinite;
-    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 999;
 }
-.particle-network {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(
-        circle at var(--x) var(--y),
-        rgba(0, 243, 255, 0.1) 0%,
-        transparent 15%
-    );
-    pointer-events: none;
-    z-index: -1;
-}
-@keyframes scan {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-}
-/* AI Assistant Styles */
-.ai-assistant {
-    position: fixed;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid var(--neon-blue);
-    border-radius: 10px;
-    padding: 10px;
-    backdrop-filter: blur(5px);
-}
-.ai-chat {
-    height: 120px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-    color: var(--matrix-green);
-    font-size: 0.9rem;
-}
-.ai-controls {
-    display: flex;
-    gap: 10px;
-}
-#ai-input {
-    flex: 1;
-    padding: 10px;
-    background: rgba(0, 17, 34, 0.9);
-    border: 1px solid var(--neon-blue);
-    color: var(--matrix-green);
-}
-/* Voice Interface */
-.voice-interface {
-    position: fixed;
-    bottom: 80px;
-    right: 15px;
-    z-index: 1000;
-}
-.voice-command-btn {
+
+.loader {
     width: 50px;
     height: 50px;
-    background: var(--cyber-purple);
-    box-shadow: 0 0 20px var(--cyber-purple);
+    border: 5px solid var(--neon-blue);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
-/* Mobile Optimization */
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 999;
+}
+
+.welcome-screen .neon-text {
+    font-size: 2rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 20px var(--neon-blue);
+}
+
+/* Nexus Title */
+.nexus-title {
+    font-size: 3rem;
+    color: var(--neon-blue);
+    text-align: center;
+    text-shadow: 0 0 20px var(--neon-blue);
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* HOLOGRAPHIC INTERFACE */
+.nexus-ui {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 600px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--neon-blue);
+    border-radius: 15px;
+    box-shadow: 0 0 50px var(--neon-blue);
+}
+
+.button {
+    padding: 15px;
+    font-size: 1.2rem;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background: var(--neon-blue);
+    color: var(--cyber-black);
+}
+
 @media (max-width: 480px) {
-    .nexus-ui {
-        width: 95%;
-        padding: 10px;
-    }
-    
     .button {
         padding: 12px;
         font-size: 1rem;
     }
-    
-    .ai-chat {
-        height: 100px;
+
+    .nexus-title {
+        font-size: 2rem;
     }
 }
