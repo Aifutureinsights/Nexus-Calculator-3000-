@@ -2,25 +2,39 @@
 // LOADING AND WELCOME SCREEN
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        document.querySelector('.loading-screen').classList.add('hidden');
-        document.querySelector('.welcome-screen').classList.remove('hidden');
+    const loadingScreen = document.querySelector('.loading-screen');
+    const welcomeScreen = document.querySelector('.welcome-screen');
+    const calculatorMain = document.querySelector('.nexus-ui');
 
-        // Play welcome audio
+    // Simulate loading screen
+    setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+        welcomeScreen.classList.remove('hidden');
+
+        // Play welcome voice
         const welcomeAudio = new Audio('https://www.soundjay.com/misc/sounds/welcome-voice.mp3');
         welcomeAudio.play();
 
+        // Transition to calculator UI
         setTimeout(() => {
-            document.querySelector('.welcome-screen').classList.add('hidden');
-            document.querySelector('.nexus-ui').classList.remove('hidden');
+            welcomeScreen.classList.add('hidden');
+            calculatorMain.classList.remove('hidden');
+            calculatorMain.style.display = 'block';
         }, 3000);
     }, 3000);
 
+    // Initialize tabs
     initTabs();
     initSubTabs();
+
+    // Initialize buttons
     initButtons();
+
+    // Fetch live crypto prices
     updateCryptoPrices();
     setInterval(updateCryptoPrices, 10000);
+
+    // Initialize voice commands
     initVoiceCommands();
 });
 
@@ -33,10 +47,14 @@ function initTabs() {
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Remove active class from all buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
             button.classList.add('active');
 
+            // Hide all tab contents
             tabContents.forEach(content => content.classList.add('hidden'));
+            // Show the selected tab content
             const tabId = button.getAttribute('data-tab');
             document.getElementById(tabId).classList.remove('hidden');
         });
@@ -49,10 +67,14 @@ function initSubTabs() {
 
     subTabButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Remove active class from all buttons
             subTabButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
             button.classList.add('active');
 
+            // Hide all sub-tab contents
             subTabContents.forEach(content => content.classList.add('hidden'));
+            // Show the selected sub-tab content
             const subTabId = button.getAttribute('data-subtab');
             document.getElementById(subTabId).classList.remove('hidden');
         });
@@ -135,10 +157,10 @@ function calculate(expression, outputField) {
 
         const result = math.evaluate(expression);
         outputField.textContent = result;
-        outputField.style.color = 'var(--matrix-green)';
     } catch (error) {
-        outputField.textContent = 'Error';
-        outputField.style.color = 'var(--hacker-red)';
+        outputField.textContent = handleCalculationError(error);
+        outputField.style.animation = 'error-pulse 0.5s';
+        setTimeout(() => outputField.style.animation = '', 500);
     }
 }
 
@@ -166,55 +188,42 @@ document.querySelector('.solve-button').addEventListener('click', () => {
         const solution = math.simplify(equation).toString();
         outputField.textContent = solution;
     } catch (error) {
-        outputField.textContent = 'Error';
-        outputField.style.color = 'var(--hacker-red)';
+        outputField.textContent = handleCalculationError(error);
+        outputField.style.animation = 'error-pulse 0.5s';
+        setTimeout(() => outputField.style.animation = '', 500);
     }
 });
 
 // =====================
 // GRAPHING SECTION
 // =====================
-let currentChart = null;
 document.querySelector('.plot-button').addEventListener('click', () => {
     const ctx = document.getElementById('graph-canvas').getContext('2d');
     const equation = document.getElementById('graphing-input').value;
 
-    if (currentChart) {
-        currentChart.destroy();
-    }
+    const xValues = Array.from({ length: 100 }, (_, i) => i - 50);
+    const yValues = xValues.map(x => math.evaluate(equation, { x }));
 
-    try {
-        const xValues = Array.from({ length: 100 }, (_, i) => i - 50);
-        const yValues = xValues.map(x => math.evaluate(equation, { x }));
-        currentChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: xValues,
-                datasets: [{
-                    label: `f(x) = ${equation}`,
-                    data: yValues,
-                    borderColor: 'rgba(0, 255, 255, 1)',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'linear',
-                        position: 'bottom',
-                        grid: { color: 'rgba(0, 255, 0, 0.1)' }
-                    },
-                    y: {
-                        grid: { color: 'rgba(0, 255, 0, 0.1)' }
-                    }
-                }
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: xValues,
+            datasets: [{
+                label: equation,
+                data: yValues,
+                borderColor: 'rgba(0, 255, 255, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { beginAtZero: true },
+                y: { beginAtZero: true }
             }
-        });
-    } catch (error) {
-        alert('Invalid function. Please try again.');
-    }
+        }
+    });
 });
 
 // =====================
@@ -282,8 +291,8 @@ async function updateCryptoPrices() {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
         const data = await response.json();
         document.getElementById('crypto-ticker').innerHTML = `
-            <div class="crypto-item">BTC: $${data.bitcoin.usd}</div>
-            <div class="crypto-item">ETH: $${data.ethereum.usd}</div>
+            <div>BTC: $${data.bitcoin.usd}</div>
+            <div>ETH: $${data.ethereum.usd}</div>
         `;
     } catch {
         document.getElementById('crypto-ticker').textContent = "Quantum data stream offline";
@@ -297,57 +306,61 @@ let isListening = false;
 
 function initVoiceCommands() {
     if (annyang) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(() => {
-                const commands = {
-                    'calculate *term': (term) => {
-                        const activeInput = document.querySelector('.question-display:not([hidden])');
-                        activeInput.value = term.replace(/plus/g, '+').replace(/minus/g, '-');
-                        calculate(activeInput.value, activeInput.nextElementSibling);
-                    },
-                    'clear': () => document.querySelector('.question-display').value = '',
-                    'switch to *tab': (tab) => {
-                        document.querySelector(`[data-tab="${tab.toLowerCase()}"]`).click();
-                    },
-                    'graph *function': (func) => {
-                        document.getElementById('graphing-input').value = func;
-                        document.querySelector('.plot-button').click();
-                    },
-                    'explain *concept': (concept) => {
-                        explainConcept(concept);
-                    }
-                };
+        const commands = {
+            'calculate *expression': (expression) => {
+                const activeInput = document.querySelector('.sub-tab-content:not(.hidden) .question-display');
+                activeInput.value = expression;
+                calculate(expression, activeInput.nextElementSibling);
+                speak(`Result is ${activeInput.nextElementSibling.textContent}`);
+            },
+            'clear': () => {
+                const activeInput = document.querySelector('.sub-tab-content:not(.hidden) .question-display');
+                activeInput.value = '';
+                activeInput.nextElementSibling.textContent = '';
+                speak('Display cleared');
+            },
+            'switch to *tab': (tab) => {
+                const tabButton = [...document.querySelectorAll('.tab-button')].find(
+                    btn => btn.textContent.toLowerCase() === tab.toLowerCase()
+                );
+                if (tabButton) tabButton.click();
+            }
+        };
+        annyang.addCommands(commands);
+        annyang.setLanguage('en-US');
 
-                annyang.addCommands(commands);
-
-                document.getElementById('voice-command').onclick = () => {
-                    if (!isListening) {
-                        annyang.start();
-                        document.getElementById('jarvis-response').textContent = "Listening...";
-                        isListening = true;
-                    } else {
-                        annyang.abort();
-                        document.getElementById('jarvis-response').textContent = "";
-                        isListening = false;
-                    }
-                };
-            })
-            .catch((error) => {
-                console.error('Microphone access denied:', error);
-            });
+        document.getElementById('voice-command').addEventListener('click', () => {
+            if (!isListening) {
+                annyang.start();
+                document.getElementById('jarvis-response').textContent = "Listening...";
+                document.getElementById('jarvis-response').style.display = 'block';
+                isListening = true;
+            } else {
+                annyang.abort();
+                document.getElementById('jarvis-response').style.display = 'none';
+                isListening = false;
+            }
+        });
     }
 }
 
+// Text-to-Speech
+function speak(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = synth.getVoices().find(voice => voice.name === 'Microsoft David - English (United States)');
+    synth.speak(utterance);
+}
+
 // Enhanced Error Handling
-function explainConcept(concept) {
-    const explanations = {
-        'pi': 'Pi (π) is a mathematical constant representing the ratio of a circle\'s circumference to its diameter.',
-        'sqrt': 'The square root (√) of a number is a value that, when multiplied by itself, gives the original number.',
-        'sin': 'Sine (sin) is a trigonometric function that relates an angle to the ratio of opposite side to hypotenuse in a right triangle.',
-        'cos': 'Cosine (cos) is a trigonometric function that relates an angle to the ratio of adjacent side to hypotenuse in a right triangle.',
-        'tan': 'Tangent (tan) is a trigonometric function that relates an angle to the ratio of opposite side to adjacent side in a right triangle.'
+function handleCalculationError(error) {
+    const errorMessages = {
+        'Division by zero': "Warning: Attempting to divide by zero",
+        'Undefined symbol': "Error: Unknown variable detected",
+        'Parenthesis mismatch': "Syntax Error: Parenthesis mismatch"
     };
 
-    const explanation = explanations[concept.toLowerCase()] || 'Sorry, I don\'t know about that concept yet.';
-    alert(explanation);
-                                               }
+    const message = errorMessages[error.message] || "Quantum computation error";
+    speak(message);
+    return message;
+                                        }
