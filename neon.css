@@ -70,3 +70,39 @@
     50% { background-color: rgba(255, 0, 60, 0.5); border-color: var(--neon-blue); }
     100% { background-color: transparent; border-color: var(--hacker-red); }
 }
+/* AI Assistant Styles */
+.ai-assistant {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--neon-blue);
+    border-radius: 15px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+}
+
+.ai-chat {
+    height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    color: var(--matrix-green);
+    font-size: 0.9em;
+}
+
+.voice-trigger {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 243, 255, 0.3);
+    border: 2px solid var(--neon-blue);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(0.95); }
+}
