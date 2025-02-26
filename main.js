@@ -2,37 +2,26 @@
 // LOADING AND WELCOME SCREEN
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
-    const loadingScreen = document.querySelector('.loading-screen');
-    const nexusUI = document.querySelector('.nexus-ui');
-
-    // Simulate loading screen
     setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-        nexusUI.classList.remove('hidden');
-    }, 2000);
+        document.querySelector('.loading-screen').classList.add('hidden');
+        document.querySelector('.welcome-screen').classList.remove('hidden');
 
-    // Initialize tabs
+        // Play welcome audio
+        const welcomeAudio = new Audio('https://www.soundjay.com/misc/sounds/welcome-voice.mp3');
+        welcomeAudio.play();
+
+        setTimeout(() => {
+            document.querySelector('.welcome-screen').classList.add('hidden');
+            document.querySelector('.nexus-ui').classList.remove('hidden');
+        }, 3000);
+    }, 3000);
+
     initTabs();
     initSubTabs();
-
-    // Initialize buttons
     initButtons();
-
-    // Fetch live crypto prices
     updateCryptoPrices();
     setInterval(updateCryptoPrices, 10000);
-
-    // Initialize voice commands
-    initVoiceAI();
-
-    // AI Input Handler
-    document.getElementById('ai-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const ai = new NexusAI();
-            ai.processCommand(e.target.value);
-            e.target.value = '';
-        }
-    });
+    initVoiceCommands();
 });
 
 // =====================
@@ -148,10 +137,8 @@ function calculate(expression, outputField) {
         outputField.textContent = result;
         outputField.style.color = 'var(--matrix-green)';
     } catch (error) {
-        outputField.textContent = handleCalculationError(error);
+        outputField.textContent = 'Error';
         outputField.style.color = 'var(--hacker-red)';
-        outputField.style.animation = 'error-pulse 0.5s';
-        setTimeout(() => outputField.style.animation = '', 500);
     }
 }
 
@@ -179,9 +166,8 @@ document.querySelector('.solve-button').addEventListener('click', () => {
         const solution = math.simplify(equation).toString();
         outputField.textContent = solution;
     } catch (error) {
-        outputField.textContent = handleCalculationError(error);
-        outputField.style.animation = 'error-pulse 0.5s';
-        setTimeout(() => outputField.style.animation = '', 500);
+        outputField.textContent = 'Error';
+        outputField.style.color = 'var(--hacker-red)';
     }
 });
 
@@ -227,7 +213,7 @@ document.querySelector('.plot-button').addEventListener('click', () => {
             }
         });
     } catch (error) {
-        document.getElementById('graphing-output').textContent = 'Invalid function';
+        alert('Invalid function. Please try again.');
     }
 });
 
@@ -309,75 +295,59 @@ async function updateCryptoPrices() {
 // =====================
 let isListening = false;
 
-function initVoiceAI() {
+function initVoiceCommands() {
     if (annyang) {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(() => {
                 const commands = {
-                    'Nexus calculate *expression': (expression) => {
-                        const activeTab = document.querySelector('.tab-content:not(.hidden)');
-                        const activeInput = activeTab.querySelector('.question-display');
-                        expression = expression
-                            .replace(/plus/g, '+')
-                            .replace(/minus/g, '-')
-                            .replace(/times/g, '*')
-                            .replace(/divided by/g, '/');
-                        activeInput.value = expression;
-                        calculate(expression, activeInput.nextElementSibling);
+                    'calculate *term': (term) => {
+                        const activeInput = document.querySelector('.question-display:not([hidden])');
+                        activeInput.value = term.replace(/plus/g, '+').replace(/minus/g, '-');
+                        calculate(activeInput.value, activeInput.nextElementSibling);
                     },
-                    'Nexus clear': () => {
-                        const activeInput = document.querySelector('.question-display');
-                        activeInput.value = '';
-                        activeInput.nextElementSibling.textContent = '';
+                    'clear': () => document.querySelector('.question-display').value = '',
+                    'switch to *tab': (tab) => {
+                        document.querySelector(`[data-tab="${tab.toLowerCase()}"]`).click();
                     },
-                    'Nexus switch to *tab': (tab) => {
-                        const tabButton = [...document.querySelectorAll('.tab-button')].find(
-                            btn => btn.textContent.toLowerCase() === tab.toLowerCase()
-                        );
-                        if (tabButton) tabButton.click();
-                    },
-                    'Nexus graph *function': (func) => {
+                    'graph *function': (func) => {
                         document.getElementById('graphing-input').value = func;
                         document.querySelector('.plot-button').click();
+                    },
+                    'explain *concept': (concept) => {
+                        explainConcept(concept);
                     }
                 };
+
                 annyang.addCommands(commands);
+
+                document.getElementById('voice-command').onclick = () => {
+                    if (!isListening) {
+                        annyang.start();
+                        document.getElementById('jarvis-response').textContent = "Listening...";
+                        isListening = true;
+                    } else {
+                        annyang.abort();
+                        document.getElementById('jarvis-response').textContent = "";
+                        isListening = false;
+                    }
+                };
             })
             .catch((error) => {
                 console.error('Microphone access denied:', error);
             });
-
-        document.getElementById('voice-command').addEventListener('click', () => {
-            if (!isListening) {
-                annyang.start();
-                document.getElementById('voice-status').textContent = "Listening...";
-                isListening = true;
-            } else {
-                annyang.abort();
-                document.getElementById('voice-status').textContent = "";
-                isListening = false;
-            }
-        });
     }
 }
 
 // Enhanced Error Handling
-function handleCalculationError(error) {
-    const errorMessages = {
-        'Division by zero': "Warning: Attempting to divide by zero",
-        'Undefined symbol': "Error: Unknown variable detected",
-        'Parenthesis mismatch': "Syntax Error: Parenthesis mismatch"
+function explainConcept(concept) {
+    const explanations = {
+        'pi': 'Pi (π) is a mathematical constant representing the ratio of a circle\'s circumference to its diameter.',
+        'sqrt': 'The square root (√) of a number is a value that, when multiplied by itself, gives the original number.',
+        'sin': 'Sine (sin) is a trigonometric function that relates an angle to the ratio of opposite side to hypotenuse in a right triangle.',
+        'cos': 'Cosine (cos) is a trigonometric function that relates an angle to the ratio of adjacent side to hypotenuse in a right triangle.',
+        'tan': 'Tangent (tan) is a trigonometric function that relates an angle to the ratio of opposite side to adjacent side in a right triangle.'
     };
 
-    const message = errorMessages[error.message] || "Quantum computation error";
-    speak(message);
-    return message;
-}
-
-// Text-to-Speech
-function speak(text) {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = synth.getVoices().find(voice => voice.name === 'Microsoft David - English (United States)');
-    synth.speak(utterance);
-                                             }
+    const explanation = explanations[concept.toLowerCase()] || 'Sorry, I don\'t know about that concept yet.';
+    alert(explanation);
+                                               }
