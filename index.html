@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 NEXUS AI CALCULATOR 3000 🔥</title>
+    <title>🔥 NEXUS CALCULATOR 3000 🔥</title>
     <!-- Styles -->
     <link rel="stylesheet" href="./neon.css">
     <!-- Fonts -->
@@ -15,23 +15,20 @@
     <script src="./main.js" defer></script>
 </head>
 <body>
-    <!-- Holographic Background -->
-    <div class="holographic-effect"></div>
-    <div class="particle-network"></div>
-
     <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="loader"></div>
-        <p class="neon-text">Initializing Neural Network...</p>
+        <p class="neon-text">Initializing Nexus Calculator...</p>
     </div>
 
-    <!-- Main Interface -->
+    <!-- Welcome Screen -->
+    <div class="welcome-screen hidden">
+        <p class="neon-text">Welcome to Nexus Calculator</p>
+    </div>
+
+    <!-- Calculator Interface -->
     <div class="nexus-ui hidden">
-        <!-- Header -->
-        <div class="ai-header">
-            <h1 class="nexus-title">NEXUS AI</h1>
-            <div class="voice-status" id="voice-status"></div>
-        </div>
+        <h1 class="nexus-title">NEXUS</h1>
 
         <!-- Navigation Tabs -->
         <div class="tabs">
@@ -115,15 +112,6 @@
                     <div class="crypto-item">ETH: Loading...</div>
                 </div>
                 <div class="refresh-button" onclick="updateCryptoPrices()">⟳ Refresh</div>
-            </div>
-        </div>
-
-        <!-- AI Assistant -->
-        <div class="ai-assistant">
-            <div class="ai-chat" id="ai-chat"></div>
-            <div class="ai-controls">
-                <button class="ai-button" id="ai-trigger">🤖</button>
-                <input type="text" id="ai-input" placeholder="Ask NEXUS...">
             </div>
         </div>
     </div>
