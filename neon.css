@@ -81,35 +81,107 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 95%;
+    width: 90%;
     max-width: 600px;
-    padding: 15px;
+    padding: 30px;
     background: rgba(0, 0, 0, 0.95);
-    border: 2px solid var(--neon-blue);
-    border-radius: 15px;
-    box-shadow: 0 0 50px var(--neon-blue);
+    border: 3px solid var(--neon-blue);
+    border-radius: 20px;
+    box-shadow: 0 0 100px var(--neon-blue), inset 0 0 50px rgba(0, 243, 255, 0.3);
+    backdrop-filter: blur(15px);
+    transform-style: preserve-3d;
+    display: none;
 }
 
-.button {
-    padding: 15px;
-    font-size: 1.2rem;
-    margin: 5px;
+.tabs, .sub-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab-button, .sub-tab-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: rgba(0, 17, 34, 0.9);
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
 }
 
-.button:hover {
-    background: var(--neon-blue);
-    color: var(--cyber-black);
+.tab-button.active, .sub-tab-button.active {
+    background: var(--matrix-green);
+    color: #000;
+    box-shadow: 0 0 40px var(--matrix-green);
 }
 
-@media (max-width: 480px) {
-    .button {
-        padding: 12px;
-        font-size: 1rem;
-    }
+.tab-content, .sub-tab-content {
+    display: block;
+}
 
-    .nexus-title {
-        font-size: 2rem;
-    }
+.tab-content.hidden, .sub-tab-content.hidden {
+    display: none;
+}
+
+.display-container {
+    margin-bottom: 20px;
+}
+
+.question-display {
+    font-size: 1.5rem;
+    color: var(--matrix-green);
+    text-align: right;
+    padding: 10px;
+    border: 2px solid var(--neon-blue);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px var(--neon-blue);
+    background: rgba(0, 0, 0, 0.8);
+    resize: none;
+    outline: none;
+}
+
+.answer-display {
+    font-size: 1.5rem;
+    color: var(--neon-blue);
+    text-align: right;
+    padding: 10px;
+    border: 2px solid var(--neon-blue);
+    border-radius: 10px;
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* NEURAL BUTTON MATRIX */
+.button-matrix {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+button {
+    padding: 25px;
+    font-size: 1.5em;
+    background: rgba(0, 17, 34, 0.9);
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+}
+
+button:hover {
+    background: var(--matrix-green);
+    color: #000;
+    box-shadow: 0 0 40px var(--matrix-green);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* Graph Canvas */
+#graph-canvas {
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
 }
